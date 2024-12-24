@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        // import { reactive, effect } from '../../../node_modules/@vue/reactivity/dist/reactivity.esm-browser.js'
+
+        import { reactive, effect } from './reactivity.js'
+
+        const state = reactive({ name: 'jw', address: { n: 316 } })
+
+        let a = 1
+        const runner = effect(() => {
+            console.log(state.address)
+            app.innerHTML = state.address.n
+        }, {
+            scheduler: () => { // watch fn
+                setTimeout(() => {
+                    // 组件的异步渲染
+                    runner()
+                }, 1000)
+            }
+        });
+
+        setTimeout(() => {
+            console.log('timer');
+            state.address.n = 504
+        }, 1000)
+
+        // runner.effect.stop(); // 停止effect的响应式能力，不在收集相关依赖了
+
+        // 默认情况下是自动的更新，数据变化后更新 effect
+        // 数据变化不更新，我可以自己决定更新
+        // setTimeout(() => {
+        //     state.name = 'jiang'
+        //     // state.name = 'a'
+        //     // state.name = 'b'
+        //     runner(); // forceUpdate
+        //     runner(); // forceUpdate
+        //     runner(); // forceUpdate
+
+        //     state.name = 'jw'
+        // }, 1000)
+
+
+        // watch 函数 数据变化了，要通知我
+
+
+    </script>
+</body>
+
+</html>

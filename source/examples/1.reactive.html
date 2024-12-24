@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        import { reactive, toRaw, shallowReactive, readonly, shallowReadonly, markRaw } from '../packages/reactivity/dist/reactivity.esm-browser.js'
+
+        // vue3中reactive 有几种变体  reactive  shallowReactive  readonly()  shallowReadonly
+
+        // 1.被readonly代理过的，在被reactive进行代理直接返回readonly的结果。
+        // let obj = { name: 'jw' };
+        // let proxy1 = readonly(obj); // 由于仅读属性无法修改。就算包了reactive也无意义
+        // debugger;
+        // let proxy2 = reactive(proxy1);
+        // console.log(proxy1 === proxy2);
+
+
+        // 2.调试reactive函数, 已经被代理过的对象，在次被代理则返回上次代理的结果
+        // let obj = { name: 'jw' };
+        // // readonly(reactive(obj)); // 如果调用过reactive后，依然可以调用readonly
+        // // Object.freeze(obj)
+        // // debugger
+        // // let proxy0 = reactive({ a: 1, __v_skip: true })
+
+
+        // let proxy1 = reactive(obj);
+        // // console.log(proxy0, proxy1)
+        // debugger
+        // let proxy2 = reactive(proxy1);
+
+        // console.log(proxy1 === proxy2)
+
+
+        // 3. toRaw方法的使用     /   markRaw 标记不被代理
+        let obj = { name: 'jw' };
+        let proxy = reactive(obj); // target -> proxy
+        debugger
+        console.log(obj === toRaw(proxy)); // proxy -> target
+
+        debugger
+        let obj2 = { name: 'jw' }
+        let proxy2 = reactive(markRaw(obj2)); // 标记不可被代理
+        console.log(proxy2);
+
+
+        // reactive  shallowReactive  readonly  shallowReadonly
+        // toRaw markRaw
+
+
+    </script>
+</body>
+
+</html>

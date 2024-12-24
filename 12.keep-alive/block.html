@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        // import {
+        //     reactive, render, toRefs, h, createElementVNode as _createElementVNode, toDisplayString
+        //         as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        import { Fragment as _Fragment, renderList as _renderList, toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock, createCommentVNode as _createCommentVNode } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        // 父 block
+        //    子的block
+        //      动态节点
+        // 前后结构发生变化的  我们叫他不稳定结构
+        let _ctx = { fruits: [1, 2, 3] } // v-for 不稳定序列最终会执行到全量diff中
+        let vnode = (_openBlock(), _createElementBlock("div", null, [
+            (_openBlock(), _createElementBlock(_Fragment, null, _renderList(3, (item) => {
+                return _createElementVNode("div", null, _toDisplayString(item), 1 /* TEXT */)
+            }), 64 /* STABLE_FRAGMENT */))
+        ]))
+        console.log(vnode)
+
+
+    </script>
+</body>
+
+</html>

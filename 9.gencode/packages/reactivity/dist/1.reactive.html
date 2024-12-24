@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        // import { reactive, effect } from '../../../node_modules/@vue/reactivity/dist/reactivity.esm-browser.js'
+        import { reactive, effect } from './reactivity.js'
+        // const state1 = reactive(obj)
+        // const state2 = reactive(state1); // 已经被代理过的对象不能再被代理了
+        // console.log(state1 === state2)
+
+
+        // 1) 创建一个响应式对象 reactive 
+
+        const state = reactive({ name: 'jw', age: 30 })
+
+        // 2) effect所有的渲染都是基于他来实现的  computed  watch 组件
+        // 默认叫响应式effect， 数据变化后会重新执行此函数
+        effect(() => { // 使用类似 react-hook
+            app.innerHTML = state.name + state.age
+        });
+        // 3) 属性会收集effect （数据的依赖收集）  数据会记录自己在哪个effect中使用了，稍后数据变化可以找到对应的effect来执行
+
+        setTimeout(() => {
+            state.name = 'jiang'
+        }, 1000)
+
+    </script>
+</body>
+
+</html>

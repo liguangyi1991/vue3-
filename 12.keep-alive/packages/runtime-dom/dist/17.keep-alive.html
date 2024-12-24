@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <script type="module">
+        import {
+            onUnmounted, onMounted, KeepAlive, Teleport, h, render, Transition, defineAsyncComponent, Text, provide, inject, ref
+        } from './runtime-dom.js'
+
+        // import {
+        //     onUnmounted, onMounted, KeepAlive, h, render, Transition, defineAsyncComponent, Text, Teleport, provide, inject, ref
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+
+        // 核心就是将dom元素 暂存一下，创建一个空的div， 将渲染好的结果移入这个div中
+        // 稍后命中了对应的组件，我就将这个匹配到的节点拿出来用
+
+        const Com1 = {
+            name: 'Comp1',
+            setup() {
+                onMounted(() => {
+                    console.log('comp1', 'mounted')
+                })
+                onUnmounted(() => {
+                    console.log('comp1', 'unmounted')
+                })
+                return () => {
+                    return h('div', 'Com1')
+                }
+            }
+        }
+        const Com2 = {
+            name: 'Comp2',
+            setup() {
+                onMounted(() => {
+                    console.log('comp2', 'mounted')
+                })
+                onUnmounted(() => {
+                    console.log('comp2', 'unmounted')
+                })
+                return () => {
+                    return h('p', 'Com2')
+                }
+            }
+        }
+
+        const Com3 = {
+            name: 'Comp3',
+            setup() {
+                onMounted(() => {
+                    console.log('comp3', 'mounted')
+                })
+                onUnmounted(() => {
+                    console.log('comp3', 'unmounted')
+                })
+                return () => {
+                    return h('a', 'Comp3')
+                }
+            }
+        }
+        // 页签根据缓存来创建的，可以增添一个缓存列表， 我希望关闭其他页签
+        // 将缓存列表移除掉
+        // include://  、 exclude
+
+        // keep-alive 的做用就是缓存组件的subTree，组件的实例上。 我们真正缓存的其实是 真实dom
+        // 如果缓存的组件数据变化了， 会重新渲染吗？ 数据变化后不会重新渲染 （deactived , activated）
+        // 动态组件，路由中来使用
+
+        // 1 -> 2 
+        // 2 -> 3 1卸载
+        // 3 -> 1 2卸载
+
+        // 3
+        //  b c d
+        //  b d c
+
+        // LRU 最后访问的在最后面，最早访问的在最前面，删除删除最早的
+
+
+        render(h(KeepAlive, { max: 2 }, {
+            default: () => {
+                return h(Com1, { key: '1' })
+            }
+        }), app);
+
+        setTimeout(() => {
+            render(h(KeepAlive, { max: 2 }, {
+                default: () => {
+                    return h(Com2, { key: '2' })
+                }
+            }), app);
+        }, 1000)
+
+        setTimeout(() => {
+            render(h(KeepAlive, { max: 2 }, {
+                default: () => {
+                    return h(Com3, { key: '3' })
+                }
+            }), app);
+        }, 2000)
+
+        setTimeout(() => {
+            render(h(KeepAlive, { max: 2 }, {
+                default: () => {
+                    return h(Com1, { key: '1' })
+                }
+            }), app);
+        }, 3000)
+
+        // 最大缓存数2 
+        // a b c d
+
+        // b c
+        // c b
+
+    </script>
+</body>
+
+</html>

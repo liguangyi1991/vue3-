@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { reactive, readonly, toRaw, ref, effect } from '../packages/reactivity/dist/reactivity.esm-browser.js'
+        const state = reactive({ name: 'jw', a: ref(100) })
+
+
+        // 1.已经是effect函数，再被effect
+        // let reactiveEffect = effect(() => {
+        //     console.log(1);
+        // });
+        // debugger;
+        // let reactiveEffect2 = effect(reactiveEffect);
+        // console.log(reactiveEffect === reactiveEffect2); // false
+
+        // 2) effect 死循环问题, 能在儿子effect中调用父亲effect可能会导致死循环
+        effect(function () { // e0
+            effect(() => { // e1
+                console.log(1)
+                effect(() => { // e2
+                    console.log(2)
+                    debugger
+                    this.run() // e2 -> e0
+                })
+            })
+        })
+
+        // 3) 调试 track和effect
+        // effect(() => {
+        //     state.name;
+        // });
+        // debugger;
+        // state.name = 'jiang'
+
+        // 4) 调试 scheduler函数
+        // effect(() => { state.name }, {
+        //     scheduler: (effect) => {
+        //         console.log('更新')
+        //     }
+        // })
+        // debugger
+        // state.name = 'jiang'
+
+        // 5) clean清理操作
+        effect(() => {
+            console.log('rerender')
+            if (state.name === 'jw') {
+                console.log(state.age);
+            }
+        })
+        state.age = 100; // 更新
+        state.name = 'jiang'; // 更新
+        state.age = 200; // 不要更新  位运算，不是全部清理，而是采用位运算的方式来计算 哪些需要重新收集
+
+    </script>
+</body>
+
+</html>

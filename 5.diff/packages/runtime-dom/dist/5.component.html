@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { Text, createVNode, h, render, Fragment } from './runtime-dom.js'
+        // import { Text, Fragment, createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer }
+        //     from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        // WebComponents 兼容性是硬伤 （模板、属性attrs、事件、插槽、样式）
+        // 组件的组成有几部分？  组件的好处优势是什么？ vue的组件有什么特点？
+        // 组件化 （对ui的封装，自己的状态，别人给我的状态） 模块化（对业务逻辑的封装）
+        const VueComponent = {
+            data() { // 防止data数据被共享 ，如果是一个对象可能就会涉及到这个对象被共享给多个组件来使用
+                return { age: 0 }
+            },
+            render(proxy) { // 允许编写模板的  -> effect
+                setTimeout(() => {
+                    proxy.age++;
+                }, 1000)
+                return h(Fragment, [h(Text, proxy.age)])
+            }
+        }
+        // 元素 和 组件  -》 组件渲染的内容 是返回的虚拟节点（可以是组件也可以元素）
+        render(h(VueComponent), app)
+
+    </script>
+</body>
+
+</html>

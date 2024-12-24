@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import {
+            h, render, Transition
+        } from './runtime-dom.js'
+
+        // import {
+        //     h, render, Transition
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        // attrs
+
+        // 以前的列表循环出来的是5个  更新后 循环出来的是10个
+        let props = {
+            onBeforeEnter(el) {
+                console.log(el, '进入之前')
+            },
+            onEnter(el, done) {
+                console.log(el, '进入')
+            },
+            onLeave(el) {
+                console.log(el, '离开')
+            },
+        }
+        render(h(Transition, props, {
+            default(props) {
+                return h('div', { style: { height: '100px', width: '100px', background: 'red' }, key: 0 })
+            }
+        }), app);
+
+        setTimeout(() => {
+            render(h(Transition, props, {
+                default(props) {
+                    return h('div', { style: { height: '100px', width: '100px', background: 'purple' }, key: 1 })
+                }
+            }), app);
+        }, 2000)
+
+    </script>
+    <style>
+        .v-enter-active,
+        .v-leave-active {
+            transition: opacity 0.4s linear;
+        }
+
+        .v-enter-from,
+        .v-leave-to {
+            opacity: 0;
+        }
+    </style>
+</body>
+
+</html>

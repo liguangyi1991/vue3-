@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { createVNode, h, render } from './runtime-dom.js'
+        // import { createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        // createVnode 只能传递三种类型 数组、文本、null
+
+
+        // 什么情况下会使用h方法  1） 模版搞不定  2） 不想引入jsx写法
+        // render(h('div'), app); // 一个参数就是标签
+
+        // vue2 中所有的属性要区分 attrs  domAttrs  props
+
+        // 2个参数的情况
+        // render(h('div', { style: { color: 'red' } }), app)
+        // render(h('div', h('span', null, 'hello')), app)
+        // render(h('div', [h('span', null, 'hello')]), app)
+        // render(h('div', 'hello'), app)
+
+        // 3个参数情况 == createVNode
+
+        // 3个以上的  第二个参数必须是属性
+
+        // render(h('div', null, 'hello', 'abc', 'bcd'), app);
+
+
+        // 所谓能复用就意味着可以使用之前创建的dom节点
+        // 如果标签名一直 能复用, 如果标签想同 key不同也不能复用
+        render(h('div', { style: { color: 'red' } }, [
+
+            h('li', { key: 'a' }, 'a'),
+            h('li', { key: 'b' }, 'b'),
+            h('li', { key: 'c' }, 'c'),
+            h('li', { key: 'd' }, 'd'),
+            h('li', { key: 'e' }, 'e'),
+            h('li', { key: 'f' }, 'f'),
+            h('li', { key: 'g' }, 'g'),
+        ]), app)
+
+
+        setTimeout(() => {
+            render(h('div', { style: { color: 'blue' } }, [
+                h('li', { key: 'a' }, 'a'),
+                h('li', { key: 'b' }, 'b'),
+                h('li', { key: 'd' }, 'd'),
+                h('li', { key: 'c' }, 'c'),
+                h('li', { key: 'e' }, 'e'),
+                h('li', { key: 'h' }, 'h'),
+                h('li', { key: 'f' }, 'f'),
+                h('li', { key: 'g' }, 'g'),
+            ]), app)
+        }, 1000);
+
+        // render(createVNode('div', null, [createVNode('span', null, 'hello')]), app)
+
+    </script>
+</body>
+
+</html>

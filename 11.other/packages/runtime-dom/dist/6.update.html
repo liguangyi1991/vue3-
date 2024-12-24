@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { Text, createVNode, h, render, Fragment } from './runtime-dom.js'
+        // import { Text, Fragment, createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer }
+        // from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+        const ChildComponent = {
+            props: {
+                message: String
+            },
+            render() {
+                return h(Text, this.message)
+            }
+        }
+        const VueComponent = {
+            data() {
+                return { flag: true }
+            },
+            props: {
+                a: Object,
+                b: Number
+            },
+            render(proxy) { // 允许编写模板的  -> effect
+                return h(Fragment, [h('button', { onClick: () => this.flag = !this.flag }, '更新组件'), h(ChildComponent, { message: this.flag ? 'ok' : 'no ok' })])
+            }
+        }
+
+        // 元素 和 组件  -》 组件渲染的内容 是返回的虚拟节点（可以是组件也可以元素）
+        render(h(VueComponent, { a: 1, b: 2, c: 1 }), app)
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <script type="module">
+        import {
+            Teleport, h, render, Transition, defineAsyncComponent, Text, provide, inject, ref
+        } from './runtime-dom.js'
+
+        // import {
+        //     h, render, Transition, defineAsyncComponent, Text, Teleport, provide, inject, ref
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+
+        // vue组件通信的方式有哪些？
+        // C
+        // 平级  A2 A1  找父组件来进行通信， 发布订阅  mitt 库
+
+
+        // 父子 props (传递事件，在组件内部来调用， 传递普通的值 ) slot插槽通信  exposed/ref 可以暴露属性，到时候可以通过ref来拿到他
+        // $attrs 来获取传递的属性   ($parent) 获取父组件  $emit绑定事件来触发
+
+        // 跨级  provide 和 inject  （A -》 B -> C）  C.$parent.$parent (不建议在业务逻辑中使用  )
+
+
+
+        // vue2 的实现就是每个组件都增加一个属性 provides   while(tpanrent){ panrent = this.$parent}
+
+        // vue react 单向数据流
+        const ChildComponent = {
+            setup() {
+                provide('a', 1)
+                provide('b', 2)
+                const state = inject('stat1e', {}); // 默认值
+
+                return () => {
+                    return h(Text, state.name.value + state.age.value)
+                }
+            }
+        }
+        const ParentComponent = { // instance
+            setup() {
+                const name = ref('jw')
+                const age = ref(30)
+                provide('stat1e', {
+                    name,
+                    age
+                })
+                setTimeout(() => {
+                    name.value = 'hehe'
+                }, 1000);
+
+                return () => {
+                    return h(ChildComponent)// subTree
+                }
+            }
+        }
+
+        render(h(ParentComponent), app)
+
+
+
+
+
+    </script>
+</body>
+
+</html>

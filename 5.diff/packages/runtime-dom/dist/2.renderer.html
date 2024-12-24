@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { createVNode } from './runtime-dom.js'
+        //import { createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+        // 方案1： 自己渲染， 一般是自己想写一套针对某个平台渲染的逻辑
+        // const renderer = createRenderer({})
+        // renderer.render({ type: 'h1' }, app)
+
+        // 方案2： 直接用vue的渲染器来进行渲染
+        // 我们想写个弹框， element-plus  message组件
+
+
+        // createVNode 是底层方法，要求参数固定
+        // h方法就是对 createVNode 的上层封装，主要为了让用户使用的时候更方便而已
+        // render(createVNode('div', null, ['hello', 'world']), app)
+
+
+        console.log(createVNode('div', null, 'hello'))
+
+    </script>
+</body>
+
+</html>

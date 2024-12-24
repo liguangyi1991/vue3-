@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        // import { proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+        import { proxyRefs, toRefs, toRef, ref, computed, reactive, effect, watch, watchEffect } from './reactivity.js'
+
+        const state = reactive({ name: 'jw', age: 30 });
+
+        // 将reactive中的值转换成ref来使用,一个个转
+        // let name = toRef(state, 'name'); // 告诉将state中的name属性转换成ref
+        // let age = toRef(state, 'age')
+        let { name, age } = toRefs(state); // 响应式数据的解构
+        watchEffect(() => { // 代理模式 proxy
+            // 自己不会用
+            let ctx = proxyRefs({ name, age })
+            // ctx.name ->  name.value -> state.name
+            app.innerHTML = ctx.name + ctx.age; // name.value => state.name
+        });
+        // {{xxx}} -> {{ctx.xxx}}
+        setTimeout(() => {
+            state.name = 'xx'
+        }, 1000);
+
+        // 如果在页面渲染的时候 （vue中的模版使用ref值的时候会自动脱ref）
+        // {{name}}
+
+        // toRef  toRefs  ref  proxyRefs  isRef
+        // shallowRef () component:is语法 比较少用
+
+
+        
+
+
+    </script>
+</body>
+
+</html>

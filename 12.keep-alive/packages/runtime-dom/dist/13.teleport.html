@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <script type="module">
+        import {
+            Teleport, h, render, Transition, defineAsyncComponent, Text
+        } from './runtime-dom.js'
+
+        // import {
+        //     h, render, Transition, defineAsyncComponent, Text, Teleport
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+
+        // 在vue2中手动挂载组件 Vue.extend().$mount('root')
+        // 在vue3中可以采用render方法来进行渲染  render(h(myAsyncComponent), app)
+
+        // Teleport
+        // const VueComponent = {
+        //     setup() {
+        //         return () => {
+        //             // hostInsert
+        //             return )
+        //         }
+        //     }
+        // }
+
+
+        render(h(Teleport, { to: '#root' }, [h(Text, 1), h(Text, 1), h(Text, 1)]), app)
+
+        setTimeout(() => {
+            render(h(Teleport, { to: '#app' }, [h(Text, 1), h(Text, 2), h(Text, 3)]), app)
+        }, 1000);
+
+
+        setTimeout(() => {
+            render(null, app)
+        }, 2000);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "2022jiagouke12-04-vue",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node scripts/dev.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.15.17"
+  },
+  "dependencies": {
+    "vue": "^3.2.45"
+  }
+}

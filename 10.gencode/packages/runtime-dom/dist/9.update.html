@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import {
+            reactive, render, toRefs, h, createElementVNode as _createElementVNode, toDisplayString
+                as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock
+        } from './runtime-dom.js'
+
+        // import {
+        //     reactive, render, toRefs, h, createElementVNode as _createElementVNode, toDisplayString
+        //         as _toDisplayString, openBlock as _openBlock, createElementBlock as _createElementBlock
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        const VueComponent = {
+            setup() {
+                const state = reactive({ name: 'jw', age: 30 })
+                setTimeout(() => {
+                    state.name = 'xx'
+                }, 1000)
+                return {
+                    ...toRefs(state)
+                }
+            },
+            render(_ctx, _cache, $props, $setup, $data, $options) {
+
+                let dynmaic = (_openBlock(), _createElementBlock("div", null, [
+                    _createElementVNode("h1", null, "Hello Jiang"),
+                    _createElementVNode("span", null, _toDisplayString(_ctx.name), 1 /* TEXT */),
+                    _createElementVNode("p", null, [
+                        _createElementVNode("span", null, _toDisplayString(_ctx.age), 1 /* TEXT */)
+                    ])
+                ]))
+                // block 节点会忽略层级 把当前根节点下面的所有 动态节点全部收集起来，作为动态节点列表
+
+
+                return dynmaic
+            }
+        }
+
+        // 以前的列表循环出来的是5个  更新后 循环出来的是10个
+
+        render(h(VueComponent), app);
+
+
+
+
+    </script>
+</body>
+
+</html>

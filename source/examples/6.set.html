@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { reactive, readonly, toRaw, ref, effect } from '../packages/reactivity/dist/reactivity.esm-browser.js'
+
+        let set = new Map();
+        set.set('name', { a: 1 })
+        let state = reactive(set);
+
+        // effect(() => {
+        //     console.log(state.get('name'))
+        // })
+        debugger
+        state.set('name', { b: 2 })
+
+        
+        console.log(state.get('name'))
+        // debugger
+       
+
+        // map -> state.get  state.set
+        // set -> state.add  state.delete  state.size
+
+
+    </script>
+</body>
+
+</html>

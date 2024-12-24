@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <script type="module">
+        import {
+            effectScope, effect, onUnmounted, onMounted, KeepAlive, Teleport, h, render, Transition, defineAsyncComponent, Text, provide, inject, ref
+        } from './runtime-dom.js'
+
+        // import {
+        //     effectScope, effect, onUnmounted, onMounted, KeepAlive, h, render, Transition, defineAsyncComponent, Text, Teleport, provide, inject, ref
+        // } from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+
+        // effect < computed | watch | watchEffect
+
+        // 状态管理工具 pinia 有一个状态不需要了，我们期望将他卸载掉
+
+        const age = ref(10)
+
+        const scope1 = effectScope()
+
+        scope1.run(() => { // 依赖收集 effectScope 会收集所有的effect，到时候stop的时候 会让收集的effect调用stop方法
+            const runner1 = effect(() => {
+                console.log(age.value)
+            })
+            const runner2 = effect(() => {
+                console.log(age.value)
+            })
+            const scope2 = effectScope(true)
+            scope2.run(() => {
+                const runner1 = effect(() => {
+                    console.log(age.value, 'inner')
+                })
+                const runner2 = effect(() => {
+                    console.log(age.value, 'inner')
+                })
+            })
+            return 1
+        })
+
+        scope1.stop(); // 移除掉  pinia -> $dispose
+
+        // runner1.effect.stop()
+        // runner2.effect.stop()
+        age.value++;
+
+    </script>
+</body>
+
+</html>

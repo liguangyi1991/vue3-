@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { reactive, effect } from './reactivity.js'
+        const state = reactive({ name: 'jw', age: 30, flag: true })
+        effect(() => { // 使用类似 react-hook
+            console.log('runner')
+            // flag 和 name属性会触发收集
+            // 下一次应该清理掉flag和name属性。 重新收集flag 和 age属性
+            app.innerHTML = state.flag ? state.name : state.age
+        });
+        setTimeout(() => {
+            state.flag = false;
+            setTimeout(() => {
+                // 等会改了name ， 会不会触发effect? 
+                console.log('改name')
+
+                state.name = 'xxx'
+            }, 1000)
+        }, 1000)
+
+        // flag = new Set()
+        // name = new Set()
+        // 下次更新前
+        // flag = new Set(effect)
+        // age = new Set(effect)
+
+
+    </script>
+</body>
+
+</html>

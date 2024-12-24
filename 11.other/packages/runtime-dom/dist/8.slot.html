@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        //import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, getCurrentInstance, Text, Fragment, createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer } from './runtime-dom.js'
+        import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, getCurrentInstance, Text, Fragment, createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer }
+            from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        // 普通插槽 我们渲染的时候 数据都是来自于父组件的
+        // 使用组件的时候 传递参数了 就是作用域插槽，会接受组件中的数据
+        // 匿名插槽，都放在default中，具名插槽就是放到对应的命名下
+
+        // 生命周期，用户注册的一些钩子方法，当组件在创建、销毁、更新的时候会调用这些方法  mixin
+
+        function useMyHook() {
+            onMounted(() => {
+                const instance = getCurrentInstance()
+                console.log(instance)
+            })
+        }
+        const VueComponent = {
+            setup(props, { slots }) {
+                //let {slots} =  context    更新 context.slots = {}
+                const text = ref('hello ')
+                // instance 和 生命周期钩子关联在一起？
+                onBeforeMount(() => {
+                    console.log('beforeMount')
+                })
+                useMyHook();
+                onBeforeUpdate(() => {
+                    console.log('beforeUpdate')
+                })
+                onUpdated(() => {
+                    console.log('updated')
+                })
+                onBeforeUnmount(() => {
+                    console.log('onBeforeUnmout')
+                })
+                onUnmounted(() => {
+                    console.log('onUnmounted')
+                })
+
+                return () => {
+                    return h(Fragment, [
+                        slots.header(),
+                        slots.default(text.value),
+                        slots.footer(),
+                    ])
+                }
+            },
+
+        }
+
+        // vue3 为了方便区分是插槽还是基本的虚拟节点，作区分 直接写成对象
+        render(h(VueComponent, {}, { // 组件的儿子就是插槽，而且插槽一定是一个对象
+            default: (text) => h(Text, 'default ' + text),
+            header: () => h(Text, 'header'),
+            footer: () => h(Text, 'footer')
+        }), app)
+
+
+        setTimeout(() => {
+            render(h(VueComponent, {}, { // 组件的儿子就是插槽，而且插槽一定是一个对象
+                default: (text) => h(Text, 'default ' + text),
+                header: () => h(Text, 'header1'),
+                footer: () => h(Text, 'footer2')
+            }), app)
+        }, 2000)
+
+        setTimeout(() => {
+            render(null, app)
+        }, 3000)
+
+    </script>
+</body>
+
+</html>

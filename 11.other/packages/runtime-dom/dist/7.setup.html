@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { reactive, proxyRefs, Text, createVNode, h, render, Fragment, toRefs } from './runtime-dom.js'
+        // import { Text, Fragment, createVNode, render, h, proxyRefs, toRefs, reactive, effect, watch, watchEffect, computed, ref, toRef, createRenderer }
+        // from '../../../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-browser.js'
+
+        const VueComponent = {
+            props: {
+                a: Object,
+                b: Number
+            },
+            setup(props, { emit, expose }) {
+
+
+                // 业务逻辑在vue中都在setup中编写
+                // 提高功能的耦合度
+                // setup的返回值会放到render函数的参数proxy中
+                const state = reactive({ name: 'jw', age: 30 });
+                const setAge = () => {
+                    state.age++
+                }
+
+                expose({
+                    setAge
+                })
+
+                // 如果你希望直接渲染内容，建议直接setup中写render函数，不建议将render写到外面
+                return () => { // proxy,name.value  prxoyRefs
+                    return h(Fragment, [h(Text, state.name), h(Text, state.age), h('button',
+                        { onClick: () => emit('myOutputEvent', '哈哈') }, '修改')])
+                }
+                // return { // ---> setupState
+                //     ...toRefs(state),
+                //     setAge
+                // }; // setup返回值需要时一个对象，这个对象可以通过proxy来取值
+            },
+            // render(proxy) { // proxy,name.value  prxoyRefs
+            //     return h('button', { onClick: proxy.setAge }, proxy.name + proxy.age)
+            // }
+
+        }
+
+        // 元素 和 组件  -》 组件渲染的内容 是返回的虚拟节点（可以是组件也可以元素）
+        render(h(VueComponent, { onMyOutputEvent: (val) => { alert(val) } }), app)
+
+
+    </script>
+</body>
+
+</html>
